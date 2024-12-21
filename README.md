@@ -1,14 +1,9 @@
-# Marlon Chaviano
 ### 💫 About Me:
-Hello! I'm a passionate Front-End Developer with a strong enthusiasm for creating visually appealing and user-friendly web applications. I thrive on transforming ideas into reality through clean, efficient code and innovative design. My experience includes developing responsive landing pages that not only look great but also provide seamless user experiences across various devices.
-
-In addition to my front-end expertise, I possess knowledge in back-end technologies, which allows me to understand and contribute to the full development stack. I have experience in creating APIs that facilitate smooth communication between the front-end and back-end, ensuring that applications run efficiently.
-
-I am eager to collaborate with others and take on new challenges in the world of web development. Let's connect and build something amazing together!
+I’m a front-end developer with a passion for creating engaging and user-friendly web experiences. My expertise lies in HTML, CSS, JavaScript and TyppeScript, and I love using frameworks like React, Next.js and Astro to bring designs to life. Alongside my front-end skills, I have a solid understanding of back-end development and API creation, which allows me to build seamless connections between the client and server. I’m always eager to learn new technologies and improve my craft, and I enjoy collaborating on projects that challenge my creativity. When I’m not coding, you can find me diving into a good book. Let’s connect!
 
 
 
-### 🌐 Socials:
+### 🌐 Connect with me:
 
 <p align="left">  
 <a href="https://twitter.com/@marlonchaviano" target="blank"><img align="center" src="https://raw.githubusercontent.com/CLorant/readme-social-icons/refs/heads/main/small/light/twitter-x.svg" alt="@marlonchaviano" height="30" width="40" /></a>  
@@ -17,7 +12,7 @@ I am eager to collaborate with others and take on new challenges in the world of
 <a href="https://www.leetcode.com/marlon-chaviano" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="marlon-chaviano" height="30" width="40" /></a>  
 </p>
 
-### 💻 Tech Stack:
+### 💻 Skills:
 
 <p align="left">
     <img src="https://skillicons.dev/icons?i=html,css,js,sass,bootstrap,tailwind,ts,react,next,astro" />
