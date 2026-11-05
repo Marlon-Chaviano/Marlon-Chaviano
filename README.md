@@ -21,15 +21,19 @@ Currently working on **Diodi** and **Grialink**. I’m starting to share how I b
 ### What I’m working on
 
 <h3>
-  <img src="./assets/diodi.png" width="28" height="28" align="absmiddle" alt="" />
-  &nbsp;Diodi
+  <a href="https://www.diodi.io/">
+    <img src="./assets/diodi.png" width="28" height="28" align="absmiddle" alt="" />
+    &nbsp;Diodi
+  </a>
 </h3>
 
 A platform in development for tracking how businesses appear in AI-generated answers, analyzing mentions and citations, and identifying opportunities for improvement.
 
 <h3>
-  <img src="./assets/grialink.svg" width="28" height="28" align="absmiddle" alt="" />
-  &nbsp;Grialink
+  <a href="https://www.grialink.com/">
+    <img src="./assets/grialink.svg" width="28" height="28" align="absmiddle" alt="" />
+    &nbsp;Grialink
+  </a>
 </h3>
 
 A customer communication and CRM platform built on Chatwoot. My work includes AI agents, voice integrations, appointment management, and business automation.
