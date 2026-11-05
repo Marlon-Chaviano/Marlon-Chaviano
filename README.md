@@ -23,7 +23,7 @@ Currently working on **Diodi** and **Grialink**. I’m starting to share how I b
 <h3>
   <a href="https://www.diodi.io/">
     <img src="./assets/diodi.png" width="28" height="28" align="absmiddle" alt="" />
-    &nbsp;Diodi
+    Diodi
   </a>
 </h3>
 
@@ -32,7 +32,7 @@ A platform in development for tracking how businesses appear in AI-generated ans
 <h3>
   <a href="https://www.grialink.com/">
     <img src="./assets/grialink.svg" width="28" height="28" align="absmiddle" alt="" />
-    &nbsp;Grialink
+    Grialink
   </a>
 </h3>
 
