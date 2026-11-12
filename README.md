@@ -42,7 +42,10 @@ A customer communication and CRM platform built on Chatwoot. My work includes AI
 
 ### LeetCode stats
 
-<img
-  src="https://leetcard.jacoblin.cool/Marlon-Chaviano?theme=nord&extension="
-  alt="Marlon's LeetCode stats"
-/>
+<a href="https://leetcode.com/u/Marlon-Chaviano/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/leetcode-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="./assets/leetcode-light.svg" />
+    <img src="./assets/leetcode-light.svg" width="100%" alt="Marlon's LeetCode stats: problems solved by difficulty, languages, and activity over the past year" />
+  </picture>
+</a>
