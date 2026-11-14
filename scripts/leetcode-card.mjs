@@ -7,47 +7,21 @@ const USERNAME = process.argv[2] || process.env.LEETCODE_USERNAME || "Marlon-Cha
 const OUT_DIR = new URL("../assets/", import.meta.url);
 
 const QUERY = `
-query($u: String!) {
+query($u: String!, $year: Int!, $previousYear: Int!) {
   allQuestionsCount { difficulty count }
   matchedUser(username: $u) {
     profile { ranking }
     submitStatsGlobal { acSubmissionNum { difficulty count } }
     languageProblemCount { languageName problemsSolved }
-    userCalendar { streak totalActiveDays submissionCalendar }
+    userCalendar(year: $year) { streak totalActiveDays submissionCalendar }
+    previousCalendar: userCalendar(year: $previousYear) { submissionCalendar }
   }
 }`;
 
 const LOGO =
   "M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z";
 
-const THEMES = {
-  dark: {
-    bg: "#0d1117",
-    border: "#30363d",
-    text: "#e6edf3",
-    muted: "#8b949e",
-    track: "#21262d",
-    divider: "#21262d",
-    easy: "#1cbbb4",
-    medium: "#ffb800",
-    hard: "#f63737",
-    accent: "#ffa116",
-    heat: ["#161b22", "#4a3210", "#7a4f0f", "#c27a10", "#ffa116"],
-  },
-  light: {
-    bg: "#ffffff",
-    border: "#d0d7de",
-    text: "#1f2328",
-    muted: "#656d76",
-    track: "#eaeef2",
-    divider: "#eaeef2",
-    easy: "#00a39b",
-    medium: "#e09600",
-    hard: "#e5263b",
-    accent: "#f08c00",
-    heat: ["#ebedf0", "#ffe2b3", "#ffc266", "#ff9d1a", "#d97400"],
-  },
-};
+import { THEMES } from "./card-theme.mjs";
 
 const FONT = `-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif`;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -61,7 +35,8 @@ async function fetchStats(username) {
       Referer: `https://leetcode.com/u/${username}/`,
       "User-Agent": "Mozilla/5.0 (github-profile-card)",
     },
-    body: JSON.stringify({ query: QUERY, variables: { u: username } }),
+    signal: AbortSignal.timeout(30_000),
+    body: JSON.stringify({ query: QUERY, variables: { u: username, year: new Date().getUTCFullYear(), previousYear: new Date().getUTCFullYear() - 1 } }),
   });
   if (!res.ok) throw new Error(`LeetCode API responded ${res.status}`);
   const { data, errors } = await res.json();
@@ -81,7 +56,10 @@ async function fetchStats(username) {
     languages: [...user.languageProblemCount]
       .sort((a, b) => b.problemsSolved - a.problemsSolved)
       .slice(0, 3),
-    calendar: JSON.parse(user.userCalendar.submissionCalendar || "{}"),
+    calendar: {
+      ...JSON.parse(user.previousCalendar.submissionCalendar || "{}"),
+      ...JSON.parse(user.userCalendar.submissionCalendar || "{}"),
+    },
   };
 }
 
@@ -152,7 +130,7 @@ function render(stats, t) {
       const y = 112 + i * 48;
       const solved = stats.solved[d.key] || 0;
       const total = stats.totals[d.key] || 1;
-      const w = Math.max(4, (solved / total) * barW);
+      const w = solved ? Math.max(4, (solved / total) * barW) : 0;
       return `
     <g class="fade" style="animation-delay:${0.2 + i * 0.1}s">
       <text x="${barX}" y="${y}" class="label">${d.key}</text>
@@ -182,7 +160,7 @@ function render(stats, t) {
   const languages = stats.languages
     .map((l, i) => {
       const y = 186 + i * 22;
-      const w = Math.max(3, (l.problemsSolved / langMax) * 110);
+      const w = l.problemsSolved ? Math.max(3, (l.problemsSolved / langMax) * 110) : 0;
       return `
     <g class="fade" style="animation-delay:${0.4 + i * 0.08}s">
       <text x="${colX}" y="${y}" class="small">${esc(l.languageName.replace(/^Python3$/, "Python"))}</text>
@@ -205,7 +183,7 @@ function render(stats, t) {
     .map((d, i) => {
       const col = Math.floor(i / 7);
       const row = i % 7;
-      return `<rect x="${hmX + col * step}" y="${gridTop + row * step}" width="${cell}" height="${cell}" rx="2.5" fill="${t.heat[heatLevel(d.count, max)]}"/>`;
+      return `<rect x="${hmX + col * step}" y="${gridTop + row * step}" width="${cell}" height="${cell}" rx="2.5" fill="${t.heat[heatLevel(d.count, max)]}"><title>${new Date(d.day * DAY * 1000).toISOString().slice(0, 10)}: ${d.count} submissions</title></rect>`;
     })
     .join("");
 
@@ -244,12 +222,12 @@ function render(stats, t) {
     .hero { font-size: 32px; font-weight: 700; }
     .small { font-size: 12px; }
     .tiny { font-size: 10px; fill: ${t.muted}; }
-    .fade { opacity: 0; animation: fade .6s ease-out forwards; }
-    .seg { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .9s cubic-bezier(.2,.7,.2,1) forwards; }
-    .bar { transform-box: fill-box; transform-origin: left; transform: scaleX(0); animation: grow .8s cubic-bezier(.2,.7,.2,1) forwards; }
+    .fade { opacity: 1; animation: fade .6s ease-out forwards; }
+    .seg { stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw .9s cubic-bezier(.2,.7,.2,1) forwards; }
+    .bar { transform-box: fill-box; transform-origin: left; transform: scaleX(1); animation: grow .8s cubic-bezier(.2,.7,.2,1) forwards; }
     @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes grow { to { transform: scaleX(1); } }
+    @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     @media (prefers-reduced-motion: reduce) {
       .fade, .seg, .bar { animation: none; opacity: 1; stroke-dashoffset: 0; transform: none; }
     }
@@ -285,7 +263,7 @@ function render(stats, t) {
     <text x="${PAD}" y="${gridTop + 2}" class="label">Activity</text>
     <text x="${PAD}" y="${gridTop + 34}" class="big">${fmt(yearSubs)}</text>
     <text x="${PAD}" y="${gridTop + 54}" class="small muted">submissions</text>
-    <text x="${PAD}" y="${gridTop + 70}" class="small muted">past 12 months</text>
+    <text x="${PAD}" y="${gridTop + 70}" class="small muted">past 53 weeks</text>
     ${monthLabels.join("")}
     ${cells}
   </g>

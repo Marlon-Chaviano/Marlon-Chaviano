@@ -49,3 +49,15 @@ A customer communication and CRM platform built on Chatwoot. My work includes AI
     <img src="./assets/leetcode-light.svg" width="100%" alt="Marlon's LeetCode stats: problems solved by difficulty, languages, and activity over the past year" />
   </picture>
 </a>
+
+### GitHub activity
+
+<a href="https://github.com/Marlon-Chaviano">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/github-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="./assets/github-light.svg" />
+    <img src="./assets/github-light.svg" width="100%" alt="Marlon's GitHub activity: contributions over the past year, active days, and best streak" />
+  </picture>
+</a>
+
+<sub>LeetCode and GitHub stats refresh automatically every 6 hours.</sub>

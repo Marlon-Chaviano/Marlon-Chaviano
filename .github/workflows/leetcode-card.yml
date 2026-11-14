@@ -1,28 +1,47 @@
-name: LeetCode card
+name: Profile stats
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "17 */6 * * *"
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [scripts/leetcode-card.mjs, .github/workflows/leetcode-card.yml]
+    paths: ["scripts/**", .github/workflows/leetcode-card.yml]
 
 permissions:
   contents: write
 
+concurrency:
+  group: profile-stats
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/leetcode-card.mjs Marlon-Chaviano
+      - name: Update LeetCode
+        id: leetcode
+        continue-on-error: true
+        run: node scripts/leetcode-card.mjs Marlon-Chaviano
+      - name: Update GitHub
+        id: github
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-card.mjs Marlon-Chaviano
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/leetcode-*.svg
-          git diff --cached --quiet || (git commit -m "chore: update LeetCode card" && git push)
+          git add assets/leetcode-*.svg assets/github-*.svg
+          git diff --cached --quiet || (git commit -m "chore: update profile stats" && git push)
+      - name: Report API failures
+        if: steps.leetcode.outcome == 'failure' || steps.github.outcome == 'failure'
+        run: |
+          echo "::error::A stats API failed. Its previous card was preserved; see the update steps above."
+          exit 1
