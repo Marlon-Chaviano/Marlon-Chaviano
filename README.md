@@ -40,8 +40,6 @@ A customer communication and CRM platform built on Chatwoot. My work includes AI
 
 ---
 
-### LeetCode stats
-
 <a href="https://leetcode.com/u/Marlon-Chaviano/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/leetcode-dark.svg" />
@@ -50,8 +48,6 @@ A customer communication and CRM platform built on Chatwoot. My work includes AI
   </picture>
 </a>
 
-### GitHub activity
-
 <a href="https://github.com/Marlon-Chaviano">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/github-dark.svg" />
@@ -59,5 +55,3 @@ A customer communication and CRM platform built on Chatwoot. My work includes AI
     <img src="./assets/github-light.svg" width="100%" alt="Marlon's GitHub activity: contributions over the past year, active days, and best streak" />
   </picture>
 </a>
-
-<sub>LeetCode and GitHub stats refresh automatically every 6 hours.</sub>
